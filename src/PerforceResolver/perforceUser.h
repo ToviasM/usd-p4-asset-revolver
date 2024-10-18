@@ -2,10 +2,10 @@
 #include <string>
 #include "common.h"
 
-class ResolveUser : public ClientUser
+class USDUser : public ClientUser
 {
 public:
-	ResolveUser() : ClientUser() {}
+	USDUser() : ClientUser() {}
 
 
 	void OutputText(const char* data, int length) override;

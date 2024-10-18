@@ -1,8 +1,11 @@
-#include "perforce_wrapper.h"
+#include "perforceWrapper.h"
 #include "common.h"
 #include <cstring>
 
-ResolveUser PerforceClient::ui;
+
+PXR_NAMESPACE_OPEN_SCOPE
+
+USDUser PerforceClient::ui;
 ClientApi PerforceClient::client;
 
 PerforceClient::PerforceClient()
@@ -14,9 +17,11 @@ PerforceClient::PerforceClient()
 		Error e;
 		PerforceClient::client.Init(&e);
 		PerforceClient::test_error(e);
-		std::cout << "Error!!" << "\n";
+		TF_DEBUG(PERFORCE_CLIENT, "Error creating client!\n");
 	}
-	std::cout << "Initialized Client!" << "\n";
+
+	TF_DEBUG(PERFORCE_CLIENT, "Initialized Client!\n");
+
 }
 
 PerforceClient::~PerforceClient()
@@ -46,7 +51,7 @@ int PerforceClient::test_error(Error e)
 	if (e.Test())
 	{
 		e.Fmt(&msg);
-		fprintf(stderr, "%s\n", msg.Text());
+		TF_DEBUG(PERFORCE_CLIENT, "%s\n", msg.Text());
 		return 1;
 	}
 	return 0;
@@ -54,7 +59,7 @@ int PerforceClient::test_error(Error e)
 
 void PerforceClient::sync_file(const std::string& path)
 {
-	std::cout << "Syncing!" << "\n";
+	TF_DEBUG(PERFORCE_CLIENT, "Syncing!\n");
 	char* modifiablePath = new char[path.size() + 1];
 	strcpy_s(modifiablePath, path.size() + 1, path.c_str());
 
@@ -64,7 +69,7 @@ void PerforceClient::sync_file(const std::string& path)
 
 	PerforceClient::client.Run("sync", &PerforceClient::ui);
 
-	std::cout << "Synced!" << "\n";
+	TF_DEBUG(PERFORCE_CLIENT, "Synced!\n");
 	delete[] modifiablePath;
 }
 
@@ -86,19 +91,13 @@ std::string PerforceClient::get_path_from_drive(std::string drive, std::string p
 {
 	std::string modifiedPath;
 
-	// Assume that the string contains the drive at some position
 	size_t pos = path.find(drive);
-	std::cout << "Getting new path!" << "\n";
+	TF_DEBUG(PERFORCE_CLIENT, "Getting new path!\n");
 	if (pos != std::string::npos) {
-		// Get the substring from the position of "D:/" onward
 		return path.substr(pos);
 	}
-	std::cout << "Failed!" << "\n";
+	TF_DEBUG(PERFORCE_CLIENT, "Failed To Get Path!\n");
 	return std::string();
 }
 
-extern "C" __declspec(dllexport) void* Test_Perforce()
-{
-	PerforceClient client = PerforceClient();
-	client.sync_file("//master/main/usd/Ball.usd");
-}
+PXR_NAMESPACE_CLOSE_SCOPE

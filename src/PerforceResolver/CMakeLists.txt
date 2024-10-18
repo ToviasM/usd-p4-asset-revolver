@@ -13,11 +13,11 @@ add_library(${AR_PERFORCERESOLVER_TARGET_LIB}
     SHARED
         debugCodes.cpp
         resolver.cpp
-        perforce_wrapper.cpp
-        perforce_user.cpp
+        perforceWrapper.cpp
+        perforceUser.cpp
         resolver.h
-        perforce_wrapper.h
-        perforce_user.h
+        perforceWrapper.h
+        perforceUser.h
 )
 set_boost_namespace(${AR_PERFORCERESOLVER_TARGET_LIB})
 # Libs

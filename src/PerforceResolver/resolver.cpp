@@ -2,7 +2,7 @@
 #define DEFINE_STRING(string) CONVERT_STRING(string)
 
 #include "resolver.h"
-#include "perforce_wrapper.h"
+#include "perforceWrapper.h"
 
 #include "pxr/base/arch/systemInfo.h"
 #include "pxr/base/tf/fileUtils.h"
@@ -33,7 +33,7 @@ _IsRelativePath(const std::string& path)
 
 static bool
 _IsDepotPath(const std::string& path) {
-    TF_DEBUG(PERFORCERESOLVER_RESOLVER, "Checking for depot path!\n");
+    TF_DEBUG(PERFORCE_RESOLVER, "Checking for depot path!\n");
     return path.find("//") == 0;
 }
 
@@ -71,10 +71,10 @@ _ResolveAnchored(
         PerforceClient cli = PerforceClient();
         if (cli.client.Dropped())
         {
-            TF_DEBUG(PERFORCERESOLVER_RESOLVER).Msg("Was unable to connect to server, server was dropped or never connected...\n");
+            TF_DEBUG(PERFORCE_RESOLVER).Msg("Was unable to connect to server, server was dropped or never connected...\n");
             return ArResolvedPath();
         }
-        TF_DEBUG(PERFORCERESOLVER_RESOLVER, "Syncing Path...\n");
+        TF_DEBUG(PERFORCE_RESOLVER, "Syncing Path...\n");
         cli.sync_file(path);
         std::string localAssetPath = cli.get_absolute_path(path);
         return ArResolvedPath(TfNormPath(localAssetPath));
@@ -84,7 +84,7 @@ _ResolveAnchored(
 }
 
 PerforceResolver::PerforceResolver() {
-    TF_DEBUG(PERFORCERESOLVER_RESOLVER).Msg("PerforceResolver::PerforceResolver()");
+    TF_DEBUG(PERFORCE_RESOLVER).Msg("PerforceResolver::PerforceResolver()");
 };
     
 PerforceResolver::~PerforceResolver() = default;
@@ -94,7 +94,7 @@ PerforceResolver::_CreateIdentifier(
     const std::string& assetPath,
     const ArResolvedPath& anchorAssetPath) const
 {
-    TF_DEBUG(PERFORCERESOLVER_RESOLVER).Msg("Resolver::_CreateIdentifier('%s', '%s')\n",
+    TF_DEBUG(PERFORCE_RESOLVER).Msg("Resolver::_CreateIdentifier('%s', '%s')\n",
         assetPath.c_str(), anchorAssetPath.GetPathString().c_str());
 
     if (assetPath.empty()) {
@@ -115,7 +115,7 @@ PerforceResolver::_CreateIdentifierForNewAsset(
     const std::string& assetPath,
     const ArResolvedPath& anchorAssetPath) const
 {
-    TF_DEBUG(PERFORCERESOLVER_RESOLVER).Msg(
+    TF_DEBUG(PERFORCE_RESOLVER).Msg(
         "Resolver::_CreateIdentifierForNewAsset"
         "('%s', '%s')\n",
         assetPath.c_str(), anchorAssetPath.GetPathString().c_str());
@@ -135,7 +135,7 @@ PerforceResolver::_CreateIdentifierForNewAsset(
 ArResolvedPath
 PerforceResolver::_Resolve(const std::string& assetPath) const
 {
-    TF_DEBUG(PERFORCERESOLVER_RESOLVER).Msg("MultiResolver::_Resolve('%s')\n", assetPath.c_str());
+    TF_DEBUG(PERFORCE_RESOLVER).Msg("MultiResolver::_Resolve('%s')\n", assetPath.c_str());
 
     if (assetPath.empty()) {
         return ArResolvedPath();
@@ -146,7 +146,7 @@ PerforceResolver::_Resolve(const std::string& assetPath) const
 ArResolvedPath
 PerforceResolver::_ResolveForNewAsset(const std::string& assetPath) const
 {
-    TF_DEBUG(PERFORCERESOLVER_RESOLVER).Msg("MultiResolver::_ResolveForNewAsset('%s')\n", assetPath.c_str());
+    TF_DEBUG(PERFORCE_RESOLVER).Msg("MultiResolver::_ResolveForNewAsset('%s')\n", assetPath.c_str());
     return ArResolvedPath();
 }
 
@@ -155,7 +155,7 @@ PerforceResolver::_GetModificationTimestamp(
     const std::string& assetPath,
     const ArResolvedPath& resolvedPath) const
 {
-    TF_DEBUG(PERFORCERESOLVER_RESOLVER).Msg(
+    TF_DEBUG(PERFORCE_RESOLVER).Msg(
         "Resolver::GetModificationTimestamp('%s', '%s')\n",
         assetPath.c_str(), resolvedPath.GetPathString().c_str());
     return ArFilesystemAsset::GetModificationTimestamp(resolvedPath);
@@ -165,7 +165,7 @@ std::shared_ptr<ArAsset>
 PerforceResolver::_OpenAsset(
     const ArResolvedPath& resolvedPath) const
 {
-    TF_DEBUG(PERFORCERESOLVER_RESOLVER).Msg(
+    TF_DEBUG(PERFORCE_RESOLVER).Msg(
         "Resolver::OpenAsset('%s')\n",
         resolvedPath.GetPathString().c_str());
     return ArFilesystemAsset::Open(resolvedPath);
@@ -176,7 +176,7 @@ PerforceResolver::_OpenAssetForWrite(
     const ArResolvedPath& resolvedPath,
     WriteMode writeMode) const
 {
-    TF_DEBUG(PERFORCERESOLVER_RESOLVER).Msg(
+    TF_DEBUG(PERFORCE_RESOLVER).Msg(
         "Resolver::_OpenAssetForWrite('%s', %d)\n",
         resolvedPath.GetPathString().c_str(),
         static_cast<int>(writeMode));
@@ -186,14 +186,14 @@ PerforceResolver::_OpenAssetForWrite(
 ArResolverContext
 PerforceResolver::_CreateDefaultContext() const
 {
-    TF_DEBUG(PERFORCERESOLVER_RESOLVER).Msg("PerforceResolver::_CreateDefaultContext()\n");
+    TF_DEBUG(PERFORCE_RESOLVER).Msg("PerforceResolver::_CreateDefaultContext()\n");
     return ArResolverContext();
 }
 
 ArResolverContext
 PerforceResolver::_CreateDefaultContextForAsset(const std::string& assetPath) const
 {
-    TF_DEBUG(PERFORCERESOLVER_RESOLVER).Msg("PerforceResolver::_CreateDefaultContextForAsset()\n");
+    TF_DEBUG(PERFORCE_RESOLVER).Msg("PerforceResolver::_CreateDefaultContextForAsset()\n");
     return _CreateDefaultContext();
 }
 

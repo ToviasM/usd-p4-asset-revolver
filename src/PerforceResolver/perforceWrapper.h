@@ -1,12 +1,15 @@
 #pragma once
 #include <string>
 #include "common.h"
-#include "perforce_user.h"
+#include "perforceUser.h"
+#include "debugCodes.h"
+
+PXR_NAMESPACE_OPEN_SCOPE
 
 class PerforceClient
 {
 public:
-	static ResolveUser ui;
+	static USDUser ui;
 	static ClientApi client;
 
 
@@ -24,4 +27,4 @@ public:
 
 };
 
-extern "C" __declspec(dllexport) void* Test_Perforce();
+PXR_NAMESPACE_CLOSE_SCOPE
