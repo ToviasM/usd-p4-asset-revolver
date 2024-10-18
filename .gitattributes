@@ -1,0 +1,5 @@
+dependencies filter=lfs diff=lfs merge=lfs -text
+dependencies/P4/lib/libp4script.lib filter=lfs diff=lfs merge=lfs -text
+dependencies/P4/lib/libp4api.lib filter=lfs diff=lfs merge=lfs -text
+dependencies/P4/test/lib/libp4api.lib filter=lfs diff=lfs merge=lfs -text
+dependencies/P4/test/lib/libp4script.lib filter=lfs diff=lfs merge=lfs -text
