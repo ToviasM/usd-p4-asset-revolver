@@ -75,8 +75,8 @@ _ResolveAnchored(
             return ArResolvedPath();
         }
         TF_DEBUG(PERFORCE_RESOLVER, "Syncing Path...\n");
-        cli.sync_file(path);
-        std::string localAssetPath = cli.get_absolute_path(path);
+        cli.SyncFile(path);
+        std::string localAssetPath = cli.GetAbsolutePath(path);
         return ArResolvedPath(TfNormPath(localAssetPath));
 
     }
