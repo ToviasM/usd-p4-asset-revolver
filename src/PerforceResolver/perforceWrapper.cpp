@@ -10,13 +10,13 @@ ClientApi PerforceClient::client;
 
 PerforceClient::PerforceClient()
 {
-	int client_status = PerforceClient::initialize_client();
+	int client_status = PerforceClient::InitializeClient();
 
 	if (client_status != 1)
 	{
 		Error e;
 		PerforceClient::client.Init(&e);
-		PerforceClient::test_error(e);
+		PerforceClient::_TestError(e);
 		TF_DEBUG(PERFORCE_CLIENT, "Error creating client!\n");
 	}
 
@@ -28,24 +28,24 @@ PerforceClient::~PerforceClient()
 {
 	Error e;
 	PerforceClient::client.Final(&e);
-	PerforceClient::test_error(e);
+	PerforceClient::_TestError(e);
 	P4Libraries::Shutdown(P4LIBRARIES_INIT_ALL, &e);
-	PerforceClient::test_error(e);
+	PerforceClient::_TestError(e);
 }
 
-int PerforceClient::initialize_client()
+int PerforceClient::InitializeClient()
 {
 	StrBuf msg;
 	Error e;
 	P4Libraries::Initialize(P4LIBRARIES_INIT_ALL, &e);
 
-	PerforceClient::test_error(e);
+	PerforceClient::_TestError(e);
 	PerforceClient::client.Init(&e);
-	PerforceClient::test_error(e);
+	PerforceClient::_TestError(e);
 	return 1;
 }
 
-int PerforceClient::test_error(Error e)
+int PerforceClient::_TestError(Error e)
 {
 	StrBuf msg;
 	if (e.Test())
@@ -57,7 +57,7 @@ int PerforceClient::test_error(Error e)
 	return 0;
 }
 
-void PerforceClient::sync_file(const std::string& path)
+void PerforceClient::SyncFile(const std::string& path)
 {
 	TF_DEBUG(PERFORCE_CLIENT, "Syncing!\n");
 	char* modifiablePath = new char[path.size() + 1];
@@ -73,7 +73,7 @@ void PerforceClient::sync_file(const std::string& path)
 	delete[] modifiablePath;
 }
 
-std::string PerforceClient::get_absolute_path(const std::string& path)
+std::string PerforceClient::GetAbsolutePath(const std::string& path)
 {
 	char* modifiablePath = new char[path.size() + 1];
 	strcpy_s(modifiablePath, path.size() + 1, path.c_str());
@@ -84,18 +84,19 @@ std::string PerforceClient::get_absolute_path(const std::string& path)
 	PerforceClient::client.Run("where", &PerforceClient::ui);
 	delete[] modifiablePath;
 
-	return PerforceClient::get_path_from_drive("D:\\", PerforceClient::ui.GetTextOutput());
+	return PerforceClient::GetPathFromDrive(PerforceClient::ui.GetTextOutput());
 }
 
-std::string PerforceClient::get_path_from_drive(std::string drive, std::string path)
+std::string PerforceClient::GetPathFromDrive(std::string path)
 {
-	std::string modifiedPath;
-
-	size_t pos = path.find(drive);
+	size_t pos = path.find(":\\");
 	TF_DEBUG(PERFORCE_CLIENT, "Getting new path!\n");
-	if (pos != std::string::npos) {
-		return path.substr(pos);
+
+	if (pos != std::string::npos && pos > 0) { // Ensure that pos - 1 is valid
+		// Subtract 1 from pos to include the drive letter
+		return path.substr(pos - 1);
 	}
+
 	TF_DEBUG(PERFORCE_CLIENT, "Failed To Get Path!\n");
 	return std::string();
 }
