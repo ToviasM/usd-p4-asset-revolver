@@ -1,5 +1,5 @@
 
-# USD P4 Asset Resolver
+# POC USD P4 Asset Resolver
 
 P4 USD Asset Resolver is a proof of concept (POC) designed to facilitate integration of Perforce with Pixar's Universal Scene Description (USD) framework. This tool resolves USD reference paths that reference stream paths of assets stored in Perforce.
 
